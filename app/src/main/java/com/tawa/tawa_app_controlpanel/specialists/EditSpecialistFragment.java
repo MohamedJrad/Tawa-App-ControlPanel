@@ -1,58 +1,46 @@
 package com.tawa.tawa_app_controlpanel.specialists;
 
-import android.content.ContentResolver;
-import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
-import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.ProgressBar;
+import android.widget.Switch;
+import android.widget.Toast;
 
-import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 import com.squareup.picasso.Picasso;
 import com.tawa.tawa_app_controlpanel.R;
+import com.tawa.tawa_app_controlpanel.model.Region;
 
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.lifecycle.ViewModel;
-import androidx.lifecycle.ViewModelProvider;
-import androidx.lifecycle.ViewModelProviders;
-
-import android.webkit.MimeTypeMap;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.ProgressBar;
-import android.widget.Toast;
-
-import com.google.firebase.firestore.CollectionReference;
-import com.google.firebase.firestore.FirebaseFirestore;
-import com.tawa.tawa_app_controlpanel.model.Specialist;
-
-import java.util.Objects;
+import java.util.HashMap;
+import java.util.Map;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
-public class AddSpecialistFragment extends Fragment {
-
-
-    //   ViewModel viewModel;
+public class EditSpecialistFragment extends Fragment {
 
 
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
-    private CollectionReference notebookRef = db.collection("specialists");
+    private CollectionReference notebookRef;
+    private DocumentReference documentReference;
     private StorageReference storageReference;
 
     private static final int PICK_IMAGE_REQUEST = 1;
@@ -68,26 +56,28 @@ public class AddSpecialistFragment extends Fragment {
     EditText email;
     Button addbtn;
     Button cancelbtn;
+    Button deletebtn;
     ProgressBar progressBar;
+    Switch aswitch;
+
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        //    viewModel = ViewModelProviders.of(this).get(AddSpecialistViewModel.class);
-
+        notebookRef = db.collection("specialists");
+        documentReference = db.collection("specialists").document(getArguments().getString("id"));
     }
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_add_specialitist, container, false);
+        return inflater.inflate(R.layout.fragment_edit_specialist, container, false);
     }
 
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
 
         storageReference = FirebaseStorage.getInstance().getReference("specialists_profile_images");
         progressBar = view.findViewById(R.id.progressBar);
@@ -98,20 +88,28 @@ public class AddSpecialistFragment extends Fragment {
         email = view.findViewById(R.id.editText_email);
         addbtn = view.findViewById(R.id.button_add);
         cancelbtn = view.findViewById(R.id.button_cancel);
+        deletebtn = view.findViewById(R.id.button_delete);
+        aswitch = view.findViewById(R.id.aswitch);
+
+        aswitch.setChecked(getArguments().getBoolean("visibility"));
+        name.setText(getArguments().getString("name"));
+        address.setText(getArguments().getString("address"));
+        phone.setText(getArguments().getString("phone"));
+        email.setText(getArguments().getString("email"));
+
+        Picasso.get().load(getArguments().getString("imageUrl")).into(profile_image);
 
 
-        profile_image.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                openFileChooser();
-
-            }
-        });
         addbtn.setOnClickListener((new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-                uploadFile();
+                if (imageUri != null) {
+                    uploadFile();
+                    updateSpecialist();
+                } else {
+                    updateSpecialist();
+                    getActivity().onBackPressed();
+                }
 
 
             }
@@ -120,27 +118,46 @@ public class AddSpecialistFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 getActivity().onBackPressed();
+
+            }
+        });
+
+        deletebtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                documentReference.delete();
+                getActivity().onBackPressed();
+            }
+        });
+        profile_image.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                openFileChooser();
             }
         });
     }
 
 
-    public void addSpecialist(String imageUrl, String name, String address, String phone, String email, String speciality, String region, String governorate,Boolean visibility) {
+    public void updateSpecialist() {
+//            Map<String, Object> userMap = new HashMap<>();
+//
+//
+//            //  String regionName = editText.getText().toString();
+//            //        Region region = new Region(regionName, "سوسة");
 
 
-        Specialist specialist = new Specialist(
-                imageUrl,
-                name,
-                address,
-                phone,
-                email,
-                getArguments().getString("speciality"),
-                getArguments().getString("region"),
-                "سوسة",
-                visibility
-        );
+        String name = this.name.getText().toString();
+        String address = this.address.getText().toString();
+        String phone = this.phone.getText().toString();
+        String email = this.email.getText().toString();
+        Boolean visibility=this.aswitch.isChecked();
 
-        notebookRef.add(specialist);
+
+        documentReference.update("name", name);
+        documentReference.update("address", address);
+        documentReference.update("phone", phone);
+        documentReference.update("email", email);
+        documentReference.update("visibility",visibility);
 
     }
 
@@ -175,32 +192,13 @@ public class AddSpecialistFragment extends Fragment {
                         public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
 
 
-
-//                            Handler handler = new Handler();
-//                            handler.postDelayed(new Runnable() {
-//                                @Override
-//                                public void run() {
-//                                    // progressBar.setProgress(0);
-//                                }
-//                            }, 5000);
-
                             taskSnapshot.getStorage().getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
                                 @Override
                                 public void onSuccess(Uri uri) {
                                     imageUrl = uri.toString();
 
-                                    String simageUrl = imageUrl;
-                                    String sname = name.getText().toString();
-                                    String saddress = address.getText().toString();
-                                    String semail = email.getText().toString();
-                                    String sphone = phone.getText().toString();
-                                    assert getArguments() != null;
-                                    String speciality = getArguments().getString("speciality");
-                                    String region = getArguments().getString("region");
-                                    String governorate = "سوسة";
-
-
-                                    addSpecialist(simageUrl, sname, saddress, sphone, semail, speciality, region, governorate,true);
+                                    documentReference.update("imageUrl", imageUrl);
+                                    updateSpecialist();
                                     requireActivity().onBackPressed();
                                 }
                             });
@@ -228,11 +226,4 @@ public class AddSpecialistFragment extends Fragment {
 
         }
     }
-
-//    private String getFileExtension(Uri uri) {
-//        ContentResolver contentResolver = requireContext().getContentResolver();
-//        MimeTypeMap mimeTypeMap = MimeTypeMap.getSingleton();
-//        return mimeTypeMap.getExtensionFromMimeType(contentResolver.getType(uri));
-//
-//    }
 }

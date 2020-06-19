@@ -8,11 +8,12 @@ public class Specialist  {
     private String phone;
     private String email;
     private String region;
+    private Boolean visibility;
 
     public Specialist() {
     }
 
-    public Specialist( String imageUrl,String name, String address, String phone, String email,String speciality, String region, String governorate) {
+    public Specialist( String imageUrl,String name, String address, String phone, String email,String speciality, String region, String governorate,Boolean visibility) {
         this.name = name;
         this.imageUrl = imageUrl;
         this.speciality = speciality;
@@ -21,6 +22,15 @@ public class Specialist  {
         this.email = email;
         this.region = region;
         this.governorate = governorate;
+        this.visibility=visibility;
+    }
+
+    public Boolean getVisibility() {
+        return visibility;
+    }
+
+    public void setVisibility(Boolean visibility) {
+        this.visibility = visibility;
     }
 
     public String getName() {

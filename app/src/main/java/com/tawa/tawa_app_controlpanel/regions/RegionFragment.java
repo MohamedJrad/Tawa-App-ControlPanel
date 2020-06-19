@@ -2,6 +2,7 @@ package com.tawa.tawa_app_controlpanel.regions;
 
 import android.os.Bundle;
 
+import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
@@ -12,6 +13,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.TextView;
 
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
@@ -38,6 +40,8 @@ public class RegionFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
         return inflater.inflate(R.layout.fragment_region, container, false);
+
+
     }
 
     @Override
@@ -85,6 +89,19 @@ public class RegionFragment extends Fragment {
                 //   Toast.makeText(getContext(), "position" + position+"id"+ id, Toast.LENGTH_SHORT).show();
             }
         });
+        adapter.setOnItemLongClickListner(new RegionAdapter.onItemLongClickListener() {
+            @Override
+            public void onItemLongClick(DocumentSnapshot documentSnapshot, int position) {
+                Region region = documentSnapshot.toObject(Region.class);
+                String id = documentSnapshot.getId();
+                Bundle bundle = new Bundle();
+                bundle.putString("region", region.getName());
+                bundle.putString("id",id);
+
+
+                Navigation.findNavController(getView()).navigate(R.id.action_regionFragment_to_editRegionFragment2,bundle);
+            }
+        });
     }
 
 
@@ -100,4 +117,19 @@ public class RegionFragment extends Fragment {
         adapter.stopListening();
     }
 
+    @Override
+    public void onCreate(Bundle savedInstanceState){
+
+        super.onCreate(savedInstanceState);
+
+        OnBackPressedCallback callback = new OnBackPressedCallback(true /* enabled by default */) {
+            @Override
+            public void handleOnBackPressed() {
+
+            }
+        };
+
+        requireActivity().getOnBackPressedDispatcher().addCallback(this, callback);
+
+    }
 }

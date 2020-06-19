@@ -8,11 +8,18 @@ import androidx.navigation.fragment.NavHostFragment;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
+
+import com.google.firebase.auth.FirebaseAuth;
+import com.tawa.tawa_app_controlpanel.ui.login.LoginActivity;
 
 public class MainActivity extends AppCompatActivity {
     AppBarConfiguration appBarConfiguration;
-
+    FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -55,8 +62,32 @@ public class MainActivity extends AppCompatActivity {
 //        // drawer menu, depending on the situation
         return NavigationUI.navigateUp(Navigation.findNavController(this, R.id.nav_host_fragment), appBarConfiguration);
     }
-    // TODO END STEP 9.7
-//    @Override
-//    public void onBackPressed() {
-//    }
+
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle item selection
+        switch (item.getItemId()) {
+            case  R.id.action_logout:
+                firebaseAuth.signOut();
+                Intent intent=new Intent(MainActivity.this, LoginActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                startActivity(intent);
+            case R.id.action_settings:
+                Navigation.findNavController(this,R.id.nav_host_fragment).navigate(R.id.action_regionFragment_to_aboutUsFragment);
+
+
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
 }

@@ -13,6 +13,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -22,6 +23,8 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 import com.tawa.tawa_app_controlpanel.R;
 import com.tawa.tawa_app_controlpanel.model.Specialist;
+import com.tawa.tawa_app_controlpanel.model.Speciality;
+
 
 public class SpecialistsFragment extends Fragment {
 
@@ -84,6 +87,26 @@ public class SpecialistsFragment extends Fragment {
                 //   Navigation.findNavController(getView()).navigate(R.id.action_regionFragment_to_specialitiesFragment,null);
 
                 //     Toast.makeText(getContext(), "position" + position+"id"+ id, Toast.LENGTH_SHORT).show();
+            }
+        });
+        adapter.setOnItemLongClickListner(new SpecialistAdapter.onItemLongClickListener() {
+            @Override
+            public void onItemLongClick(DocumentSnapshot documentSnapshot, int position) {
+                Specialist specialist = documentSnapshot.toObject(Specialist.class);
+                String id = documentSnapshot.getId();
+                Bundle bundle = new Bundle();
+
+                bundle.putString("id",id);
+                bundle.putString("name",specialist.getName());
+                bundle.putString("address",specialist.getAddress());
+                bundle.putString("phone",specialist.getPhone());
+                bundle.putString("email",specialist.getEmail());
+                bundle.putString("imageUrl",specialist.getImageUrl());
+                bundle.putBoolean("visibility",specialist.getVisibility());
+
+
+
+                Navigation.findNavController(getView()).navigate(R.id.action_specialistsFragment_to_editSpecialistFragment,bundle);
             }
         });
     }

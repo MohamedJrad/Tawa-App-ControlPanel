@@ -15,14 +15,10 @@ import com.tawa.tawa_app_controlpanel.R;
 import com.tawa.tawa_app_controlpanel.model.Region;
 
 class RegionAdapter extends FirestoreRecyclerAdapter<Region, RegionAdapter.NoteHolder> {
-    /**
-     * Create a new RecyclerView adapter that listens to a Firestore Query.  See {@link
-     * FirestoreRecyclerOptions} for configuration options.
-     *
-     * @param options
-     */
+
 
     private onItemClickListener listener;
+    private onItemLongClickListener longClickListener;
 
     public RegionAdapter(@NonNull FirestoreRecyclerOptions options) {
         super(options);
@@ -54,7 +50,19 @@ class RegionAdapter extends FirestoreRecyclerAdapter<Region, RegionAdapter.NoteH
                     int position = getAdapterPosition();
                     if (position != RecyclerView.NO_POSITION && listener != null) {
                         listener.onItemClick(getSnapshots().getSnapshot(position), position);
+
                     }
+                }
+            });
+            itemView.setOnLongClickListener(new View.OnLongClickListener() {
+                @Override
+                public boolean onLongClick(View v) {
+                    int position = getAdapterPosition();
+                    if (position != RecyclerView.NO_POSITION  && longClickListener != null) {
+
+                        longClickListener.onItemLongClick(getSnapshots().getSnapshot(position), position);
+                    }
+                    return false;
                 }
             });
         }
@@ -65,6 +73,15 @@ class RegionAdapter extends FirestoreRecyclerAdapter<Region, RegionAdapter.NoteH
     }
 
     public void setOnItemClickListner(onItemClickListener listner) {
-        this.listener=listner;
+        this.listener = listner;
     }
+
+
+    public interface onItemLongClickListener {
+        void onItemLongClick(DocumentSnapshot documentSnapshot, int position);
+    }
+
+    public void setOnItemLongClickListner(onItemLongClickListener listner) { this.longClickListener = listner; }
 }
+
+

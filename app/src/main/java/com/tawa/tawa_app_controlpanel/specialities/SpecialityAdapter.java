@@ -15,9 +15,11 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.tawa.tawa_app_controlpanel.R;
 import com.tawa.tawa_app_controlpanel.model.Speciality;
 
+
 class SpecialityAdapter extends FirestoreRecyclerAdapter<Speciality, SpecialityAdapter.SpecialityHolder> {
 
     private onItemClickListener listener;
+    private onItemLongClickListener longClickListener;
 
     public SpecialityAdapter(@NonNull FirestoreRecyclerOptions options) {
         super(options);
@@ -52,6 +54,17 @@ class SpecialityAdapter extends FirestoreRecyclerAdapter<Speciality, SpecialityA
                     }
                 }
             });
+            itemView.setOnLongClickListener(new View.OnLongClickListener() {
+                @Override
+                public boolean onLongClick(View v) {
+                    int position = getAdapterPosition();
+                    if (position != RecyclerView.NO_POSITION  && longClickListener != null) {
+
+                        longClickListener.onItemLongClick(getSnapshots().getSnapshot(position), position);
+                    }
+                    return false;
+                }
+            });
         }
     }
 
@@ -62,4 +75,9 @@ class SpecialityAdapter extends FirestoreRecyclerAdapter<Speciality, SpecialityA
     public void setOnItemClickListner(onItemClickListener listner) {
         this.listener=listner;
     }
+    public interface onItemLongClickListener {
+        void onItemLongClick(DocumentSnapshot documentSnapshot, int position);
+    }
+
+    public void setOnItemLongClickListner(SpecialityAdapter.onItemLongClickListener listner) { this.longClickListener = listner; }
 }

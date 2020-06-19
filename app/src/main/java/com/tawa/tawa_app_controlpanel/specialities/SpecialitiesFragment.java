@@ -1,10 +1,12 @@
 package com.tawa.tawa_app_controlpanel.specialities;
 
 import android.os.Bundle;
+import android.speech.SpeechRecognizer;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -20,6 +22,7 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 import com.tawa.tawa_app_controlpanel.R;
+import com.tawa.tawa_app_controlpanel.model.Region;
 import com.tawa.tawa_app_controlpanel.model.Speciality;
 
 
@@ -96,6 +99,20 @@ public class SpecialitiesFragment extends Fragment {
                 Navigation.findNavController(getView()).navigate(R.id.action_specialitiesFragment_to_specialistsFragment, bundle);
 
                 //   Toast.makeText(getContext(), "position" + position+"id"+ id, Toast.LENGTH_SHORT).show();
+            }
+        });
+        adapter.setOnItemLongClickListner(new SpecialityAdapter.onItemLongClickListener() {
+            @Override
+            public void onItemLongClick(DocumentSnapshot documentSnapshot, int position) {
+               Speciality speciality = documentSnapshot.toObject(Speciality.class);
+                String id = documentSnapshot.getId();
+                Bundle bundle = new Bundle();
+                bundle.putString("name", speciality.getName());
+                bundle.putString("id",id);
+                bundle.putString("region",getArguments().getString("id"));
+
+
+                Navigation.findNavController(getView()).navigate(R.id.action_specialitiesFragment_to_editSpecialityFragment,bundle);
             }
         });
     }

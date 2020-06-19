@@ -15,6 +15,12 @@
         <action
             android:id="@+id/action_regionFragment_to_addRegionFragment"
             app:destination="@id/addRegionFragment" />
+        <action
+            android:id="@+id/action_regionFragment_to_editRegionFragment2"
+            app:destination="@id/editRegionFragment2" />
+        <action
+            android:id="@+id/action_regionFragment_to_aboutUsFragment"
+            app:destination="@id/aboutUsFragment" />
     </fragment>
     <fragment
         android:id="@+id/specialitiesFragment"
@@ -27,6 +33,9 @@
         <action
             android:id="@+id/action_specialitiesFragment_to_addSpecialityFragment"
             app:destination="@id/addSpecialityFragment" />
+        <action
+            android:id="@+id/action_specialitiesFragment_to_editSpecialityFragment"
+            app:destination="@id/editSpecialityFragment" />
     </fragment>
     <fragment
         android:id="@+id/specialistsFragment"
@@ -36,6 +45,9 @@
         <action
             android:id="@+id/action_specialistsFragment_to_addSpecialistFragment2"
             app:destination="@id/addSpecialistFragment2" />
+        <action
+            android:id="@+id/action_specialistsFragment_to_editSpecialistFragment"
+            app:destination="@id/editSpecialistFragment" />
     </fragment>
     <fragment
         android:id="@+id/addRegionFragment"
@@ -52,4 +64,21 @@
         android:name="com.tawa.tawa_app_controlpanel.specialists.AddSpecialistFragment"
         android:label="fragment_add_specialitist"
         tools:layout="@layout/fragment_add_specialitist" />
+    <fragment
+        android:id="@+id/editRegionFragment2"
+        android:name="com.tawa.tawa_app_controlpanel.regions.EditRegionFragment"
+        android:label="EditRegionFragment" />
+    <fragment
+        android:id="@+id/editSpecialityFragment"
+        android:name="com.tawa.tawa_app_controlpanel.specialities.EditSpecialityFragment"
+        android:label="EditSpecialityFragment" />
+    <fragment
+        android:id="@+id/editSpecialistFragment"
+        android:name="com.tawa.tawa_app_controlpanel.specialists.EditSpecialistFragment"
+        android:label="EditSpecialistFragment" />
+    <fragment
+        android:id="@+id/aboutUsFragment"
+        android:name="com.tawa.tawa_app_controlpanel.AboutUsFragment"
+        android:label="fragment_about_us"
+        tools:layout="@layout/fragment_about_us" />
 </navigation>
