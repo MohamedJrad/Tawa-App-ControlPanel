@@ -1,0 +1,69 @@
+{
+  "project_info": {
+    "project_number": "140353518886",
+    "firebase_url": "https://tawaapp-10c70.firebaseio.com",
+    "project_id": "tawaapp-10c70",
+    "storage_bucket": "tawaapp-10c70.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:140353518886:android:9143bef535f8d352ab15e7",
+        "android_client_info": {
+          "package_name": "com.tawa.tawa_app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "140353518886-34g19jta1r0ogb8sal7nsvl4j8kk95o2.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBNhUIBSB-2g0L9BVctjInX_L92YAtIR_0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "140353518886-34g19jta1r0ogb8sal7nsvl4j8kk95o2.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:140353518886:android:a4033d9566d62c22ab15e7",
+        "android_client_info": {
+          "package_name": "com.tawa.tawa_app_controlpanel"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "140353518886-34g19jta1r0ogb8sal7nsvl4j8kk95o2.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBNhUIBSB-2g0L9BVctjInX_L92YAtIR_0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "140353518886-34g19jta1r0ogb8sal7nsvl4j8kk95o2.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -1,0 +1,87 @@
+package com.tawa.tawa_app_controlpanel.specialities;
+
+import android.app.Activity;
+import android.os.Bundle;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentActivity;
+import androidx.fragment.app.FragmentManager;
+import androidx.navigation.Navigation;
+
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.EditText;
+
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.tawa.tawa_app_controlpanel.R;
+import com.tawa.tawa_app_controlpanel.model.Speciality;
+
+import java.util.Objects;
+
+public class AddSpecialityFragment extends Fragment {
+
+
+    private FirebaseFirestore db = FirebaseFirestore.getInstance();
+   private CollectionReference    notebookRef ;
+
+    EditText editText;
+    Button addbtn;
+    Button cancelbtn;
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        notebookRef = db.collection("regions").document(requireArguments().getString("id")).collection("specialities");
+
+    }
+
+    @Override
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
+                             @Nullable Bundle savedInstanceState) {
+        return inflater.inflate(R.layout.fragment_add_speciality, container, false);
+
+    }
+
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
+        editText = view.findViewById(R.id.editTextText_newspeciality);
+
+        addbtn = view.findViewById(R.id.button_add);
+        cancelbtn = view.findViewById(R.id.button_cancel);
+
+
+        addbtn.setOnClickListener((new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                addSpeciality();
+                getActivity().onBackPressed();
+
+
+            }
+        }));
+        cancelbtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                getActivity().onBackPressed();
+            }
+        });
+    }
+
+
+    public void addSpeciality() {
+        String specialityName = editText.getText().toString();
+        Speciality speciality = new Speciality(specialityName);
+
+        notebookRef.add(speciality);
+
+    }
+
+}

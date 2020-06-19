@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/app_navigation"
+    app:startDestination="@id/regionFragment">
+    <fragment
+        android:id="@+id/regionFragment"
+        android:name="com.tawa.tawa_app_controlpanel.regions.RegionFragment"
+        android:label="fragment_region"
+        tools:layout="@layout/fragment_region" >
+        <action
+            android:id="@+id/action_regionFragment_to_specialitiesFragment"
+            app:destination="@id/specialitiesFragment" />
+        <action
+            android:id="@+id/action_regionFragment_to_addRegionFragment"
+            app:destination="@id/addRegionFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/specialitiesFragment"
+        android:name="com.tawa.tawa_app_controlpanel.specialities.SpecialitiesFragment"
+        android:label="fragment_specialities"
+        tools:layout="@layout/fragment_specialities" >
+        <action
+            android:id="@+id/action_specialitiesFragment_to_specialistsFragment"
+            app:destination="@id/specialistsFragment" />
+        <action
+            android:id="@+id/action_specialitiesFragment_to_addSpecialityFragment"
+            app:destination="@id/addSpecialityFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/specialistsFragment"
+        android:name="com.tawa.tawa_app_controlpanel.specialists.SpecialistsFragment"
+        android:label="fragment_specialist"
+        tools:layout="@layout/fragment_specialist" >
+        <action
+            android:id="@+id/action_specialistsFragment_to_addSpecialistFragment2"
+            app:destination="@id/addSpecialistFragment2" />
+    </fragment>
+    <fragment
+        android:id="@+id/addRegionFragment"
+        android:name="com.tawa.tawa_app_controlpanel.regions.AddRegionFragment"
+        android:label="fragment_add_region"
+        tools:layout="@layout/fragment_add_region" />
+    <fragment
+        android:id="@+id/addSpecialityFragment"
+        android:name="com.tawa.tawa_app_controlpanel.specialities.AddSpecialityFragment"
+        android:label="fragment_add_speciality2"
+        tools:layout="@layout/fragment_add_speciality" />
+    <fragment
+        android:id="@+id/addSpecialistFragment2"
+        android:name="com.tawa.tawa_app_controlpanel.specialists.AddSpecialistFragment"
+        android:label="fragment_add_specialitist"
+        tools:layout="@layout/fragment_add_specialitist" />
+</navigation>
