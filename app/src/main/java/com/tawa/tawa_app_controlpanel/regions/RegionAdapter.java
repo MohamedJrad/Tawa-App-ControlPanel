@@ -3,6 +3,8 @@ package com.tawa.tawa_app_controlpanel.regions;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Filter;
+import android.widget.Filterable;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -14,7 +16,7 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.tawa.tawa_app_controlpanel.R;
 import com.tawa.tawa_app_controlpanel.model.Region;
 
-class RegionAdapter extends FirestoreRecyclerAdapter<Region, RegionAdapter.NoteHolder> {
+class RegionAdapter extends FirestoreRecyclerAdapter<Region, RegionAdapter.NoteHolder>  {
 
 
     private onItemClickListener listener;
@@ -35,6 +37,8 @@ class RegionAdapter extends FirestoreRecyclerAdapter<Region, RegionAdapter.NoteH
         View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.region_list_item, parent, false);
         return new NoteHolder(v);
     }
+
+
 
 
     class NoteHolder extends RecyclerView.ViewHolder {

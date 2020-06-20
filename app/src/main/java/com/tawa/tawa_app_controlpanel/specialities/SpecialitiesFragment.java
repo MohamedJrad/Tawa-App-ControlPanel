@@ -1,10 +1,13 @@
 package com.tawa.tawa_app_controlpanel.specialities;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.speech.SpeechRecognizer;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.SearchView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -17,6 +20,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -24,15 +28,17 @@ import com.google.firebase.firestore.Query;
 import com.tawa.tawa_app_controlpanel.R;
 import com.tawa.tawa_app_controlpanel.model.Region;
 import com.tawa.tawa_app_controlpanel.model.Speciality;
+import com.tawa.tawa_app_controlpanel.ui.login.LoginActivity;
 
 
 public class SpecialitiesFragment extends Fragment {
 
+    FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
 
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
     private CollectionReference notebookRef ;
     private SpecialityAdapter adapter;
-
+SearchView searchView;
 
     public static SpecialitiesFragment newInstance() {
         return new SpecialitiesFragment();
@@ -41,6 +47,9 @@ public class SpecialitiesFragment extends Fragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        setHasOptionsMenu(true);
+
      notebookRef   = db.collection("regions").document(getArguments().getString("id")).collection("specialities");
     }
 
@@ -54,7 +63,7 @@ public class SpecialitiesFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         TextView text = getActivity().findViewById(R.id.toolbar_title);
-
+searchView=view.findViewById(R.id.searchView);
         assert getArguments() != null;
         text.setText(getArguments().getString("region"));
 
@@ -115,6 +124,34 @@ public class SpecialitiesFragment extends Fragment {
                 Navigation.findNavController(getView()).navigate(R.id.action_specialitiesFragment_to_editSpecialityFragment,bundle);
             }
         });
+
+
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String s) {
+
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String s) {
+                if (!s.isEmpty()) {
+                    Query query = notebookRef.orderBy("name", Query.Direction.ASCENDING).startAt(s).endAt(s+"\uf8ff");;
+                    FirestoreRecyclerOptions<Speciality> options = new FirestoreRecyclerOptions.Builder<Speciality>()
+                            .setQuery(query, Speciality.class)
+                            .build();
+                    adapter.updateOptions(options);
+                }else {
+
+                    Query query1 = notebookRef.orderBy("name", Query.Direction.ASCENDING);
+                    FirestoreRecyclerOptions<Speciality> options = new FirestoreRecyclerOptions.Builder<Speciality>()
+                            .setQuery(query1, Speciality.class)
+                            .build();
+                    adapter.updateOptions(options);
+                }
+                return false;
+            }
+        });
     }
 
 
@@ -129,6 +166,24 @@ public class SpecialitiesFragment extends Fragment {
         super.onDestroy();
         adapter.stopListening();
     }
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle item selection
+        switch (item.getItemId()) {
+            case R.id.action_logout:
+                firebaseAuth.signOut();
+                Intent intent = new Intent(getActivity().getApplicationContext(), LoginActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                startActivity(intent);
+            case R.id.action_settings:
+                Navigation.findNavController(getView()).navigate(R.id.action_specialitiesFragment_to_aboutUsFragment);
 
+
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
 
 }

@@ -18,6 +18,8 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 
+import androidx.appcompat.widget.Toolbar;
+
 import com.tawa.tawa_app_controlpanel.R;
 
 
@@ -31,6 +33,7 @@ public class AddRegionFragment extends Fragment {
     EditText editText;
     Button addbtn;
     Button cancelbtn;
+    Toolbar toolbar;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
@@ -42,6 +45,8 @@ public class AddRegionFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        toolbar = getActivity().findViewById(R.id.toolbar);
+        toolbar.setVisibility(View.INVISIBLE);
 
         editText = view.findViewById(R.id.editTextText_newspeciality);
 
@@ -72,6 +77,13 @@ public class AddRegionFragment extends Fragment {
         Region region = new Region(regionName, "سوسة");
 
         notebookRef.add(region);
+
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        toolbar.setVisibility(View.VISIBLE);
 
     }
 }

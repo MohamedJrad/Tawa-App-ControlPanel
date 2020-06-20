@@ -71,23 +71,23 @@ public class MainActivity extends AppCompatActivity {
         return true;
     }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle item selection
-        switch (item.getItemId()) {
-            case  R.id.action_logout:
-                firebaseAuth.signOut();
-                Intent intent=new Intent(MainActivity.this, LoginActivity.class);
-                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                startActivity(intent);
-            case R.id.action_settings:
-                Navigation.findNavController(this,R.id.nav_host_fragment).navigate(R.id.action_regionFragment_to_aboutUsFragment);
-
-
-                return true;
-            default:
-                return super.onOptionsItemSelected(item);
-        }
-    }
+//    @Override
+//    public boolean onOptionsItemSelected(MenuItem item) {
+//        // Handle item selection
+//        switch (item.getItemId()) {
+//            case  R.id.action_logout:
+//                firebaseAuth.signOut();
+//                Intent intent=new Intent(MainActivity.this, LoginActivity.class);
+//                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+//                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+//                startActivity(intent);
+//            case R.id.action_settings:
+//                Navigation.findNavController(this,R.id.nav_host_fragment).navigate(R.id.action_regionFragment_to_aboutUsFragment);
+//
+//
+//                return true;
+//            default:
+//                return super.onOptionsItemSelected(item);
+//        }
+//    }
 }

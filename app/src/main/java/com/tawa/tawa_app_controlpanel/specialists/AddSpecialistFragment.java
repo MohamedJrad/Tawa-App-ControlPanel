@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 
+import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 
 import android.os.Handler;
@@ -69,12 +70,14 @@ public class AddSpecialistFragment extends Fragment {
     Button addbtn;
     Button cancelbtn;
     ProgressBar progressBar;
+    Toolbar toolbar;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         //    viewModel = ViewModelProviders.of(this).get(AddSpecialistViewModel.class);
-
+        toolbar = getActivity().findViewById(R.id.toolbar);
+        toolbar.setVisibility(View.INVISIBLE);
     }
 
     @Override
@@ -235,4 +238,11 @@ public class AddSpecialistFragment extends Fragment {
 //        return mimeTypeMap.getExtensionFromMimeType(contentResolver.getType(uri));
 //
 //    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        toolbar.setVisibility(View.VISIBLE);
+
+    }
 }

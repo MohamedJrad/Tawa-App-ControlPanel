@@ -32,7 +32,7 @@ import com.tawa.tawa_app_controlpanel.MainActivity;
 import com.tawa.tawa_app_controlpanel.R;
 
 public class LoginActivity extends AppCompatActivity {
-FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
+    FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
 
 
     @Override
@@ -46,12 +46,10 @@ FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
         final Button loginButton = findViewById(R.id.button_login);
 
 
-;
-
         TextWatcher afterTextChangedListener = new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-                // ignore
+
             }
 
             @Override
@@ -80,23 +78,27 @@ FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
         loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if (!usernameEditText.getText().toString().matches("") && !passwordEditText.getText().toString().matches("")) {
 
-                firebaseAuth.signInWithEmailAndPassword(usernameEditText.getText().toString(),passwordEditText.getText().toString())
-                        .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-                            @Override
-                            public void onComplete(@NonNull Task<AuthResult> task) {
-                                if(task.isSuccessful()){
-                                    startActivity(new Intent(LoginActivity.this, MainActivity.class));
-                                }else {
-                                    Toast.makeText(LoginActivity.this,task.getException().getMessage(),Toast.LENGTH_SHORT).show();
+                    firebaseAuth.signInWithEmailAndPassword(usernameEditText.getText().toString(), passwordEditText.getText().toString())
+                            .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                                @Override
+                                public void onComplete(@NonNull Task<AuthResult> task) {
+                                    if (task.isSuccessful()) {
+                                        startActivity(new Intent(LoginActivity.this, MainActivity.class));
+                                    } else {
+                                        Toast.makeText(LoginActivity.this, task.getException().getMessage(), Toast.LENGTH_SHORT).show();
+                                    }
                                 }
-                            }
-                        });
+                            });
+
+
+                }
+
 
             }
         });
     }
-
 
 
     private void showLoginFailed(@StringRes Integer errorString) {
@@ -106,14 +108,17 @@ FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
     @Override
     protected void onStart() {
         super.onStart();
-        if(FirebaseAuth.getInstance().getCurrentUser()!=null){
-            startActivity(new Intent(LoginActivity.this, MainActivity.class));
 
-        }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
     }
 
     @Override
     public void onBackPressed() {
-        super.onBackPressed();
+   finish();
+   System.exit(0);
     }
 }

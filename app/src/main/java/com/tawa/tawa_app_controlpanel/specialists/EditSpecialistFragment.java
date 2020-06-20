@@ -6,6 +6,7 @@ import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 
 import android.view.LayoutInflater;
@@ -60,12 +61,15 @@ public class EditSpecialistFragment extends Fragment {
     ProgressBar progressBar;
     Switch aswitch;
 
+    Toolbar toolbar;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         notebookRef = db.collection("specialists");
         documentReference = db.collection("specialists").document(getArguments().getString("id"));
+        toolbar = getActivity().findViewById(R.id.toolbar);
+        toolbar.setVisibility(View.INVISIBLE);
     }
 
     @Override
@@ -225,5 +229,11 @@ public class EditSpecialistFragment extends Fragment {
         } else {
 
         }
+    }
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        toolbar.setVisibility(View.VISIBLE);
+
     }
 }

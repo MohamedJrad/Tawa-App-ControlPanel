@@ -36,6 +36,9 @@
         <action
             android:id="@+id/action_specialitiesFragment_to_editSpecialityFragment"
             app:destination="@id/editSpecialityFragment" />
+        <action
+            android:id="@+id/action_specialitiesFragment_to_aboutUsFragment"
+            app:destination="@id/aboutUsFragment" />
     </fragment>
     <fragment
         android:id="@+id/specialistsFragment"
@@ -48,6 +51,9 @@
         <action
             android:id="@+id/action_specialistsFragment_to_editSpecialistFragment"
             app:destination="@id/editSpecialistFragment" />
+        <action
+            android:id="@+id/action_specialistsFragment_to_aboutUsFragment"
+            app:destination="@id/aboutUsFragment" />
     </fragment>
     <fragment
         android:id="@+id/addRegionFragment"

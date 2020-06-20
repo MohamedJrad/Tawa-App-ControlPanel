@@ -4,9 +4,11 @@ import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 
 import android.view.LayoutInflater;
+import android.view.Menu;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -34,10 +36,15 @@ public class EditRegionFragment extends Fragment {
     Button addbtn;
     Button cancelbtn;
     Button deletebtn;
+    Toolbar toolbar;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setHasOptionsMenu(true);
+        setMenuVisibility(false);
+        toolbar = getActivity().findViewById(R.id.toolbar);
+        toolbar.setVisibility(View.INVISIBLE);
         notebookRef=db.collection("regions").document(getArguments().getString("id"));
     }
 
@@ -51,7 +58,6 @@ public class EditRegionFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
 
         editText = view.findViewById(R.id.editTextText_newspeciality);
 
@@ -94,6 +100,12 @@ public class EditRegionFragment extends Fragment {
         Region region = new Region(regionName, "سوسة");
 
         notebookRef.update("name",regionName);
+
+    }
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        toolbar.setVisibility(View.VISIBLE);
 
     }
 }

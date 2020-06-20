@@ -40,11 +40,16 @@ class SpecialistAdapter extends FirestoreRecyclerAdapter<Specialist, SpecialistA
         holder.address.setText(model.getAddress());
         holder.phone.setText(model.getPhone());
         holder.email.setText(model.getEmail());
-        if(model.getVisibility()){
+        boolean visibility=true;
+        if (model.getVisibility() != null) {
+            visibility = model.getVisibility();
+        }
+
+
+        if (visibility) {
             holder.visibility.setText("Visible");
             holder.visibility.setTextColor(Color.GREEN);
-        }else
-        {
+        } else {
             holder.visibility.setText("Invisible");
             holder.visibility.setTextColor(Color.RED);
         }
@@ -76,7 +81,7 @@ class SpecialistAdapter extends FirestoreRecyclerAdapter<Specialist, SpecialistA
             address = itemView.findViewById(R.id.textView_address);
             phone = itemView.findViewById(R.id.textView_phone);
             email = itemView.findViewById(R.id.textView_email);
-            visibility=itemView.findViewById(R.id.textView_visibility);
+            visibility = itemView.findViewById(R.id.textView_visibility);
 
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
