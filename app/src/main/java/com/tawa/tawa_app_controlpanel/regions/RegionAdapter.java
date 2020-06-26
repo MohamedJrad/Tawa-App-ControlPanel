@@ -16,7 +16,7 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.tawa.tawa_app_controlpanel.R;
 import com.tawa.tawa_app_controlpanel.model.Region;
 
-class RegionAdapter extends FirestoreRecyclerAdapter<Region, RegionAdapter.NoteHolder>  {
+public class RegionAdapter extends FirestoreRecyclerAdapter<Region, RegionAdapter.NoteHolder>  {
 
 
     private onItemClickListener listener;

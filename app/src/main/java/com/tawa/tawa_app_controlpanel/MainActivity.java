@@ -10,9 +10,11 @@ import androidx.navigation.ui.NavigationUI;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.widget.TextView;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.tawa.tawa_app_controlpanel.ui.login.LoginActivity;
@@ -26,6 +28,19 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        TextView title = findViewById(R.id.toolbar_title);
+//        title.setSelected(true);
+//
+//        title.setEllipsize(TextUtils.TruncateAt.MARQUEE);
+//        title.setHorizontallyScrolling(true);
+//        title.setMarqueeRepeatLimit(-1);
+//        title.setFocusable(true);
+//        title.setFocusableInTouchMode(true);
+
+
+        title.setEllipsize(TextUtils.TruncateAt.MARQUEE);
+        title.setSingleLine(true);
+        title.setSelected(true);
 
         NavHostFragment host = (NavHostFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.nav_host_fragment);

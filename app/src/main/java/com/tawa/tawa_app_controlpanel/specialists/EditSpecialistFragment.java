@@ -29,10 +29,6 @@ import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 import com.squareup.picasso.Picasso;
 import com.tawa.tawa_app_controlpanel.R;
-import com.tawa.tawa_app_controlpanel.model.Region;
-
-import java.util.HashMap;
-import java.util.Map;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -55,7 +51,8 @@ public class EditSpecialistFragment extends Fragment {
     EditText address;
     EditText phone;
     EditText email;
-    Button addbtn;
+    EditText jobTitle;
+    Button updatebtn;
     Button cancelbtn;
     Button deletebtn;
     ProgressBar progressBar;
@@ -90,21 +87,23 @@ public class EditSpecialistFragment extends Fragment {
         address = view.findViewById(R.id.editText_address);
         phone = view.findViewById(R.id.editText_phone);
         email = view.findViewById(R.id.editText_email);
-        addbtn = view.findViewById(R.id.button_add);
+      updatebtn = view.findViewById(R.id.button_update);
         cancelbtn = view.findViewById(R.id.button_cancel);
         deletebtn = view.findViewById(R.id.button_delete);
         aswitch = view.findViewById(R.id.aswitch);
+        jobTitle=view.findViewById(R.id.editText_jobtitle);
 
         aswitch.setChecked(getArguments().getBoolean("visibility"));
         name.setText(getArguments().getString("name"));
         address.setText(getArguments().getString("address"));
         phone.setText(getArguments().getString("phone"));
         email.setText(getArguments().getString("email"));
+        jobTitle.setText(getArguments().getString("jobTitle"));
 
         Picasso.get().load(getArguments().getString("imageUrl")).into(profile_image);
 
 
-        addbtn.setOnClickListener((new View.OnClickListener() {
+        updatebtn.setOnClickListener((new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (imageUri != null) {
@@ -155,9 +154,11 @@ public class EditSpecialistFragment extends Fragment {
         String phone = this.phone.getText().toString();
         String email = this.email.getText().toString();
         Boolean visibility=this.aswitch.isChecked();
+        String jobTitle=this.jobTitle.getText().toString();
 
 
         documentReference.update("name", name);
+        documentReference.update("jobTitle",jobTitle);
         documentReference.update("address", address);
         documentReference.update("phone", phone);
         documentReference.update("email", email);
@@ -221,7 +222,7 @@ public class EditSpecialistFragment extends Fragment {
                     double progress = (100.0 * taskSnapshot.getBytesTransferred() / taskSnapshot.getTotalByteCount());
                     progressBar.setVisibility(View.VISIBLE);
                     progressBar.setProgress((int) progress);
-                    addbtn.setClickable(false);
+                    updatebtn.setClickable(false);
                     cancelbtn.setClickable(false);
                     profile_image.setClickable(false);
                 }
@@ -236,4 +237,5 @@ public class EditSpecialistFragment extends Fragment {
         toolbar.setVisibility(View.VISIBLE);
 
     }
+
 }

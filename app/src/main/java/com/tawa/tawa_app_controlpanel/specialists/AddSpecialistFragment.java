@@ -1,7 +1,5 @@
 package com.tawa.tawa_app_controlpanel.specialists;
 
-import android.content.ContentResolver;
-import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -9,15 +7,13 @@ import android.os.Bundle;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 
-import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageReference;
@@ -28,11 +24,7 @@ import com.tawa.tawa_app_controlpanel.R;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.lifecycle.ViewModel;
-import androidx.lifecycle.ViewModelProvider;
-import androidx.lifecycle.ViewModelProviders;
 
-import android.webkit.MimeTypeMap;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
@@ -40,9 +32,8 @@ import android.widget.Toast;
 
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.tawa.tawa_app_controlpanel.model.GalleryImage;
 import com.tawa.tawa_app_controlpanel.model.Specialist;
-
-import java.util.Objects;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -54,6 +45,7 @@ public class AddSpecialistFragment extends Fragment {
 
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
     private CollectionReference notebookRef = db.collection("specialists");
+    private CollectionReference galleryRef;
     private StorageReference storageReference;
 
     private static final int PICK_IMAGE_REQUEST = 1;
@@ -67,6 +59,8 @@ public class AddSpecialistFragment extends Fragment {
     EditText address;
     EditText phone;
     EditText email;
+    EditText jobTitle;
+    EditText description;
     Button addbtn;
     Button cancelbtn;
     ProgressBar progressBar;
@@ -78,6 +72,7 @@ public class AddSpecialistFragment extends Fragment {
         //    viewModel = ViewModelProviders.of(this).get(AddSpecialistViewModel.class);
         toolbar = getActivity().findViewById(R.id.toolbar);
         toolbar.setVisibility(View.INVISIBLE);
+
     }
 
     @Override
@@ -98,8 +93,11 @@ public class AddSpecialistFragment extends Fragment {
         name = view.findViewById(R.id.editText_name);
         address = view.findViewById(R.id.editText_address);
         phone = view.findViewById(R.id.editText_phone);
+        jobTitle = view.findViewById(R.id.editText_jobtitle);
+        description = view.findViewById(R.id.editText_description);
+
         email = view.findViewById(R.id.editText_email);
-        addbtn = view.findViewById(R.id.button_add);
+        addbtn = view.findViewById(R.id.button_update);
         cancelbtn = view.findViewById(R.id.button_cancel);
 
 
@@ -128,22 +126,41 @@ public class AddSpecialistFragment extends Fragment {
     }
 
 
-    public void addSpecialist(String imageUrl, String name, String address, String phone, String email, String speciality, String region, String governorate,Boolean visibility) {
+    public void addSpecialist(String name, String jobTitle, String imageUrl, String speciality, String address, String phone, String email, String region, String governorate, Boolean visibility) {
 
 
         Specialist specialist = new Specialist(
-                imageUrl,
                 name,
+                jobTitle,
+                imageUrl,
+                getArguments().getString("speciality"),
                 address,
                 phone,
                 email,
-                getArguments().getString("speciality"),
                 getArguments().getString("region"),
                 "سوسة",
                 visibility
+
+
         );
 
-        notebookRef.add(specialist);
+        notebookRef.add(specialist).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+            @Override
+            public void onSuccess(DocumentReference documentReference) {
+
+                galleryRef = db.collection("specialists").document(documentReference.getId()).collection("gallery");
+
+                for (int i = 1; i <= 6; i++) {
+
+
+                    GalleryImage galleryImage = new GalleryImage("", "empty");
+                    galleryRef.document(String.valueOf(i)).set(galleryImage);
+
+                }
+
+            }
+        });
+
 
     }
 
@@ -178,7 +195,6 @@ public class AddSpecialistFragment extends Fragment {
                         public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
 
 
-
 //                            Handler handler = new Handler();
 //                            handler.postDelayed(new Runnable() {
 //                                @Override
@@ -194,6 +210,8 @@ public class AddSpecialistFragment extends Fragment {
 
                                     String simageUrl = imageUrl;
                                     String sname = name.getText().toString();
+                                    String sjobTitle = jobTitle.getText().toString();
+                                    String sdescription = description.getText().toString();
                                     String saddress = address.getText().toString();
                                     String semail = email.getText().toString();
                                     String sphone = phone.getText().toString();
@@ -203,7 +221,7 @@ public class AddSpecialistFragment extends Fragment {
                                     String governorate = "سوسة";
 
 
-                                    addSpecialist(simageUrl, sname, saddress, sphone, semail, speciality, region, governorate,true);
+                                    addSpecialist( sname, sjobTitle, simageUrl, speciality, saddress, sphone, semail, region, governorate, true);
                                     requireActivity().onBackPressed();
                                 }
                             });

@@ -55,7 +55,7 @@ public class EditSpecialityFragment extends Fragment {
 
         editText = view.findViewById(R.id.editTextText_newspeciality);
 
-        addbtn = view.findViewById(R.id.button_add);
+        addbtn = view.findViewById(R.id.button_update);
         cancelbtn = view.findViewById(R.id.button_cancel);
         deletebtn=view.findViewById(R.id.button_delete);
         editText.setText(getArguments().getString("name"));

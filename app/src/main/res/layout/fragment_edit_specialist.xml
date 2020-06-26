@@ -25,6 +25,20 @@
             android:layout_height="match_parent">
 
 
+            <EditText
+                android:id="@+id/editText_jobtitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:ems="10"
+                android:gravity="center"
+                android:hint="المسمى الوظيفي"
+                android:inputType="textPersonName"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.497"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/editText_name" />
+
             <de.hdodenhof.circleimageview.CircleImageView
                 android:id="@+id/profile_image"
                 android:layout_width="111dp"
@@ -56,15 +70,14 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
+
                 android:ems="10"
                 android:hint="العنوان"
-                android:inputType="textPersonName"
                 android:textAlignment="center"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.502"
+                app:layout_constraintHorizontal_bias="0.497"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/editText_name"
-                />
+                app:layout_constraintTop_toBottomOf="@+id/editText_jobtitle" />
 
             <EditText
                 android:id="@+id/editText_phone"
@@ -84,19 +97,19 @@
                 android:id="@+id/editText_email"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="12dp"
+                android:layout_marginTop="16dp"
                 android:ems="10"
                 android:hint="البريد الالكتروني"
 
+                android:inputType="textEmailAddress"
                 android:textAlignment="center"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.497"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/editText_phone"
-                android:inputType="textEmailAddress"/>
+                app:layout_constraintTop_toBottomOf="@+id/editText_phone" />
 
             <Button
-                android:id="@+id/button_add"
+                android:id="@+id/button_update"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
@@ -115,7 +128,7 @@
                 android:layout_marginBottom="32dp"
                 android:text="Cancel"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toStartOf="@+id/button_add"
+                app:layout_constraintEnd_toStartOf="@+id/button_update"
                 app:layout_constraintStart_toStartOf="@+id/editText_email"
                 app:layout_constraintTop_toBottomOf="@+id/editText_email" />
 
@@ -127,6 +140,7 @@
                 android:visibility="invisible"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.543"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 

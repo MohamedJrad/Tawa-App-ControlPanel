@@ -80,7 +80,7 @@ public class RegionFragment extends Fragment {
 
         adapter = new RegionAdapter(options);
 
-        RecyclerView recyclerView = view.findViewById(R.id.region_recycler_view);
+        RecyclerView recyclerView = view.findViewById(R.id.test_recycler_view);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         recyclerView.setAdapter(adapter);

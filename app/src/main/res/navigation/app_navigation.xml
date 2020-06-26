@@ -54,6 +54,9 @@
         <action
             android:id="@+id/action_specialistsFragment_to_aboutUsFragment"
             app:destination="@id/aboutUsFragment" />
+        <action
+            android:id="@+id/action_specialistsFragment_to_specialistInfoFragment"
+            app:destination="@id/specialistInfoFragment" />
     </fragment>
     <fragment
         android:id="@+id/addRegionFragment"
@@ -87,4 +90,32 @@
         android:name="com.tawa.tawa_app_controlpanel.AboutUsFragment"
         android:label="fragment_about_us"
         tools:layout="@layout/fragment_about_us" />
+    <fragment
+        android:id="@+id/specialistInfoFragment"
+        android:name="com.tawa.tawa_app_controlpanel.specialists.SpecialistInfoFragment"
+        android:label="fragment_specialist_info"
+        tools:layout="@layout/fragment_specialist_info" >
+        <action
+            android:id="@+id/action_specialistInfoFragment_to_aboutUsFragment"
+            app:destination="@id/aboutUsFragment" />
+        <action
+            android:id="@+id/action_specialistInfoFragment_to_editSpecialistInfoFragment"
+            app:destination="@id/editSpecialistInfoFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/editSpecialistInfoFragment"
+        android:name="com.tawa.tawa_app_controlpanel.specialists.EditSpecialistInfoFragment"
+        android:label="EditSpecialistInfoFragment" >
+        <action
+            android:id="@+id/action_editSpecialistInfoFragment_to_specialistInfoFragment"
+            app:destination="@id/specialistInfoFragment" />
+        <action
+            android:id="@+id/action_editSpecialistInfoFragment_to_editGalaryImageFragment"
+            app:destination="@id/editGalaryImageFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/editGalaryImageFragment"
+        android:name="com.tawa.tawa_app_controlpanel.specialists.EditGalaryImageFragment"
+        android:label="fragment_edit_galary_image"
+        tools:layout="@layout/fragment_edit_galary_image" />
 </navigation>

@@ -6,6 +6,7 @@ import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -37,9 +38,12 @@ class SpecialistAdapter extends FirestoreRecyclerAdapter<Specialist, SpecialistA
     protected void onBindViewHolder(@NonNull SpecialistHolder holder, int position, @NonNull Specialist model) {
         Picasso.get().load(model.getImageUrl()).placeholder(R.drawable.avatar).into(holder.profileImage);
         holder.name.setText(model.getName());
+        holder.jobTitle.setText(model.getJobTitle());
+       // holder.description.setText(model.getDescription());
         holder.address.setText(model.getAddress());
         holder.phone.setText(model.getPhone());
         holder.email.setText(model.getEmail());
+
         boolean visibility=true;
         if (model.getVisibility() != null) {
             visibility = model.getVisibility();
@@ -69,6 +73,8 @@ class SpecialistAdapter extends FirestoreRecyclerAdapter<Specialist, SpecialistA
 
         CircleImageView profileImage;
         TextView name;
+        Button jobTitle;
+        TextView description;
         TextView address;
         TextView phone;
         TextView email;
@@ -78,6 +84,8 @@ class SpecialistAdapter extends FirestoreRecyclerAdapter<Specialist, SpecialistA
             super(itemView);
             profileImage = itemView.findViewById(R.id.profile_image);
             name = itemView.findViewById(R.id.textView_name);
+            jobTitle=itemView.findViewById(R.id.jobTitleField);
+            description=itemView.findViewById(R.id.editText_description);
             address = itemView.findViewById(R.id.textView_address);
             phone = itemView.findViewById(R.id.textView_phone);
             email = itemView.findViewById(R.id.textView_email);

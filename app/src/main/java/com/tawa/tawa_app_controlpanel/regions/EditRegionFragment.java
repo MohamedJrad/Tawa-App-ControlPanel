@@ -8,20 +8,15 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 
 import android.view.LayoutInflater;
-import android.view.Menu;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 
-import com.firebase.ui.firestore.FirestoreRecyclerOptions;
-import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.Query;
 import com.tawa.tawa_app_controlpanel.R;
 import com.tawa.tawa_app_controlpanel.model.Region;
-import com.tawa.tawa_app_controlpanel.model.Specialist;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -29,7 +24,7 @@ import java.util.Map;
 
 public class EditRegionFragment extends Fragment {
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
-    private DocumentReference notebookRef ;
+    private DocumentReference regionRef;
 
 
     EditText editText;
@@ -45,7 +40,7 @@ public class EditRegionFragment extends Fragment {
         setMenuVisibility(false);
         toolbar = getActivity().findViewById(R.id.toolbar);
         toolbar.setVisibility(View.INVISIBLE);
-        notebookRef=db.collection("regions").document(getArguments().getString("id"));
+        regionRef =db.collection("regions").document(getArguments().getString("id"));
     }
 
     @Override
@@ -61,7 +56,7 @@ public class EditRegionFragment extends Fragment {
 
         editText = view.findViewById(R.id.editTextText_newspeciality);
 
-        addbtn = view.findViewById(R.id.button_add);
+        addbtn = view.findViewById(R.id.button_update);
         cancelbtn = view.findViewById(R.id.button_cancel);
         deletebtn=view.findViewById(R.id.button_delete);
         editText.setText(getArguments().getString("region"));
@@ -85,7 +80,7 @@ public class EditRegionFragment extends Fragment {
         deletebtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                notebookRef.delete();
+                regionRef.delete();
                 getActivity().onBackPressed();
             }
         });
@@ -99,7 +94,7 @@ public class EditRegionFragment extends Fragment {
         String regionName = editText.getText().toString();
         Region region = new Region(regionName, "سوسة");
 
-        notebookRef.update("name",regionName);
+        regionRef.update("name",regionName);
 
     }
     @Override

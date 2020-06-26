@@ -34,7 +34,7 @@
         app:layout_constraintTop_toBottomOf="@+id/textView" />
 
     <Button
-        android:id="@+id/button_add"
+        android:id="@+id/button_update"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="32dp"
@@ -49,7 +49,7 @@
         android:layout_marginTop="32dp"
         android:layout_marginEnd="40dp"
         android:text="Cancel"
-        app:layout_constraintEnd_toStartOf="@+id/button_add"
+        app:layout_constraintEnd_toStartOf="@+id/button_update"
         app:layout_constraintStart_toStartOf="@+id/editTextText_newspeciality"
         app:layout_constraintTop_toBottomOf="@+id/editTextText_newspeciality" />
 

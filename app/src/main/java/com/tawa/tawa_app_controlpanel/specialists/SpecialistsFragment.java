@@ -39,7 +39,8 @@ public class SpecialistsFragment extends Fragment {
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
     private CollectionReference notebookRef = db.collection("specialists");
     private SpecialistAdapter adapter;
-SearchView searchView;
+    SearchView searchView;
+
     public static SpecialistsFragment newInstance() {
         return new SpecialistsFragment();
     }
@@ -57,27 +58,28 @@ SearchView searchView;
     }
 
     @Override
-    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+    public void onViewCreated(@NonNull View view, @Nullable final Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        TextView text =getActivity().findViewById(R.id.toolbar_title);
-        text.setText(getArguments().getString("speciality")+"/"+getArguments().getString("region"));
+        TextView text = getActivity().findViewById(R.id.toolbar_title);
+        text.setText(getArguments().getString("speciality") );
 
-        FloatingActionButton fb=view.findViewById(R.id.floatingActionButton_specialist);
+        FloatingActionButton fb = view.findViewById(R.id.floatingActionButton_specialist);
         fb.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Bundle   bundle = new Bundle();
+                Bundle bundle = new Bundle();
                 bundle.putString("region", getArguments().getString("region"));
                 bundle.putString("speciality", getArguments().getString("speciality"));
 
-                Navigation.findNavController(getView()).navigate(R.id.action_specialistsFragment_to_addSpecialistFragment2,bundle);
+
+                Navigation.findNavController(getView()).navigate(R.id.action_specialistsFragment_to_addSpecialistFragment2, bundle);
 
             }
         });
 
 
         Query query = notebookRef
-                .whereEqualTo("speciality",getArguments().getString("speciality")).whereEqualTo("region",getArguments().getString("region"));
+                .whereEqualTo("speciality", getArguments().getString("speciality")).whereEqualTo("region", getArguments().getString("region"));
         //.orderBy("name", Query.Direction.ASCENDING);
         FirestoreRecyclerOptions<Specialist> options = new FirestoreRecyclerOptions.Builder<Specialist>()
                 .setQuery(query, Specialist.class)
@@ -96,8 +98,23 @@ SearchView searchView;
             public void onItemClick(DocumentSnapshot documentSnapshot, int position) {
                 Specialist specialist = documentSnapshot.toObject(Specialist.class);
                 String id = documentSnapshot.getId();
+                Bundle bundle = new Bundle();
 
-                //   Navigation.findNavController(getView()).navigate(R.id.action_regionFragment_to_specialitiesFragment,null);
+                bundle.putString("id", id);
+                bundle.putString("name", specialist.getName());
+                bundle.putString("address", specialist.getAddress());
+                bundle.putString("phone", specialist.getPhone());
+                bundle.putString("email", specialist.getEmail());
+                bundle.putString("imageUrl", specialist.getImageUrl());
+                bundle.putBoolean("visibility", specialist.getVisibility());
+                bundle.putString("jobTitle",specialist.getJobTitle());
+                bundle.putString("description",specialist.getDescription());
+                bundle.putString("facebook",specialist.getFacebook());
+                bundle.putString("instagram",specialist.getInstagram());
+
+
+
+                Navigation.findNavController(getView()).navigate(R.id.action_specialistsFragment_to_specialistInfoFragment, bundle);
 
                 //     Toast.makeText(getContext(), "position" + position+"id"+ id, Toast.LENGTH_SHORT).show();
             }
@@ -109,17 +126,17 @@ SearchView searchView;
                 String id = documentSnapshot.getId();
                 Bundle bundle = new Bundle();
 
-                bundle.putString("id",id);
-                bundle.putString("name",specialist.getName());
-                bundle.putString("address",specialist.getAddress());
-                bundle.putString("phone",specialist.getPhone());
-                bundle.putString("email",specialist.getEmail());
-                bundle.putString("imageUrl",specialist.getImageUrl());
-                bundle.putBoolean("visibility",specialist.getVisibility());
+                bundle.putString("id", id);
+                bundle.putString("name", specialist.getName());
+                bundle.putString("jobTitle",specialist.getJobTitle());
+                bundle.putString("address", specialist.getAddress());
+                bundle.putString("phone", specialist.getPhone());
+                bundle.putString("email", specialist.getEmail());
+                bundle.putString("imageUrl", specialist.getImageUrl());
+                bundle.putBoolean("visibility", specialist.getVisibility());
 
 
-
-                Navigation.findNavController(getView()).navigate(R.id.action_specialistsFragment_to_editSpecialistFragment,bundle);
+                Navigation.findNavController(getView()).navigate(R.id.action_specialistsFragment_to_editSpecialistFragment, bundle);
             }
         });
         searchView = view.findViewById(R.id.searchView);
@@ -134,18 +151,18 @@ SearchView searchView;
             public boolean onQueryTextChange(String s) {
                 if (!s.isEmpty()) {
                     Query query = notebookRef
-                            .whereEqualTo("speciality",getArguments().getString("speciality"))
-                            .whereEqualTo("region",getArguments().getString("region"))
-                            .orderBy("name").startAt(s).endAt(s+"\uf8ff");
+                            .whereEqualTo("speciality", getArguments().getString("speciality"))
+                            .whereEqualTo("region", getArguments().getString("region"))
+                            .orderBy("name").startAt(s).endAt(s + "\uf8ff");
                     //.orderBy("name", Query.Direction.ASCENDING);
                     FirestoreRecyclerOptions<Specialist> options = new FirestoreRecyclerOptions.Builder<Specialist>()
                             .setQuery(query, Specialist.class)
                             .build();
                     adapter.updateOptions(options);
-                }else {
+                } else {
                     Query query = notebookRef
-                            .whereEqualTo("speciality",getArguments().getString("speciality"))
-                            .whereEqualTo("region",getArguments().getString("region"));
+                            .whereEqualTo("speciality", getArguments().getString("speciality"))
+                            .whereEqualTo("region", getArguments().getString("region"));
                     //.orderBy("name", Query.Direction.ASCENDING);
                     FirestoreRecyclerOptions<Specialist> options = new FirestoreRecyclerOptions.Builder<Specialist>()
                             .setQuery(query, Specialist.class)

@@ -3,6 +3,7 @@ package com.tawa.tawa_app_controlpanel.specialities;
 import android.content.Intent;
 import android.os.Bundle;
 import android.speech.SpeechRecognizer;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -36,9 +37,9 @@ public class SpecialitiesFragment extends Fragment {
     FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
 
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
-    private CollectionReference notebookRef ;
+    private CollectionReference notebookRef;
     private SpecialityAdapter adapter;
-SearchView searchView;
+    SearchView searchView;
 
     public static SpecialitiesFragment newInstance() {
         return new SpecialitiesFragment();
@@ -50,7 +51,7 @@ SearchView searchView;
 
         setHasOptionsMenu(true);
 
-     notebookRef   = db.collection("regions").document(getArguments().getString("id")).collection("specialities");
+        notebookRef = db.collection("regions").document(getArguments().getString("id")).collection("specialities");
     }
 
     @Override
@@ -62,11 +63,20 @@ SearchView searchView;
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        TextView text = getActivity().findViewById(R.id.toolbar_title);
-searchView=view.findViewById(R.id.searchView);
-        assert getArguments() != null;
-        text.setText(getArguments().getString("region"));
+        TextView title = getActivity().findViewById(R.id.toolbar_title);
 
+
+//        title.setEllipsize(TextUtils.TruncateAt.MARQUEE);
+//      //  title.setHorizontallyScrolling(true);
+//       // title.setMarqueeRepeatLimit(-1);
+//      //  title.setFocusable(true);
+//        //title.setFocusableInTouchMode(true);
+//        title.setSingleLine(true);
+//        title.setSelected(true);
+
+        assert getArguments() != null;
+        title.setText(getArguments().getString("region"));
+        searchView = view.findViewById(R.id.searchView);
 
         FloatingActionButton fb = view.findViewById(R.id.floatingActionButton_specialities);
         fb.setOnClickListener(new View.OnClickListener() {
@@ -113,15 +123,15 @@ searchView=view.findViewById(R.id.searchView);
         adapter.setOnItemLongClickListner(new SpecialityAdapter.onItemLongClickListener() {
             @Override
             public void onItemLongClick(DocumentSnapshot documentSnapshot, int position) {
-               Speciality speciality = documentSnapshot.toObject(Speciality.class);
+                Speciality speciality = documentSnapshot.toObject(Speciality.class);
                 String id = documentSnapshot.getId();
                 Bundle bundle = new Bundle();
                 bundle.putString("name", speciality.getName());
-                bundle.putString("id",id);
-                bundle.putString("region",getArguments().getString("id"));
+                bundle.putString("id", id);
+                bundle.putString("region", getArguments().getString("id"));
 
 
-                Navigation.findNavController(getView()).navigate(R.id.action_specialitiesFragment_to_editSpecialityFragment,bundle);
+                Navigation.findNavController(getView()).navigate(R.id.action_specialitiesFragment_to_editSpecialityFragment, bundle);
             }
         });
 
@@ -136,12 +146,13 @@ searchView=view.findViewById(R.id.searchView);
             @Override
             public boolean onQueryTextChange(String s) {
                 if (!s.isEmpty()) {
-                    Query query = notebookRef.orderBy("name", Query.Direction.ASCENDING).startAt(s).endAt(s+"\uf8ff");;
+                    Query query = notebookRef.orderBy("name", Query.Direction.ASCENDING).startAt(s).endAt(s + "\uf8ff");
+                    ;
                     FirestoreRecyclerOptions<Speciality> options = new FirestoreRecyclerOptions.Builder<Speciality>()
                             .setQuery(query, Speciality.class)
                             .build();
                     adapter.updateOptions(options);
-                }else {
+                } else {
 
                     Query query1 = notebookRef.orderBy("name", Query.Direction.ASCENDING);
                     FirestoreRecyclerOptions<Speciality> options = new FirestoreRecyclerOptions.Builder<Speciality>()
@@ -166,6 +177,7 @@ searchView=view.findViewById(R.id.searchView);
         super.onDestroy();
         adapter.stopListening();
     }
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle item selection

@@ -10,7 +10,6 @@ import com.tawa.tawa_app_controlpanel.model.Region;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.navigation.Navigation;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -50,7 +49,7 @@ public class AddRegionFragment extends Fragment {
 
         editText = view.findViewById(R.id.editTextText_newspeciality);
 
-        addbtn = view.findViewById(R.id.button_add);
+        addbtn = view.findViewById(R.id.button_update);
         cancelbtn = view.findViewById(R.id.button_cancel);
 
 
