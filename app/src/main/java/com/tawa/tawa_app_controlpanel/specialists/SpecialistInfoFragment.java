@@ -4,6 +4,7 @@ import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.content.pm.ResolveInfo;
 import android.net.Uri;
 import android.os.Bundle;
 
@@ -43,6 +44,7 @@ import com.tawa.tawa_app_controlpanel.model.Specialist;
 import com.tawa.tawa_app_controlpanel.regions.RegionAdapter;
 import com.tawa.tawa_app_controlpanel.ui.login.LoginActivity;
 
+import java.util.List;
 import java.util.Objects;
 
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -118,7 +120,7 @@ public class SpecialistInfoFragment extends Fragment {
         instagramIcon = view.findViewById(R.id.instagram_icon);
         edit = view.findViewById(R.id.button_edit);
         recyclerView = view.findViewById(R.id.gallery_recycleview);
-//        name.setText(getArguments().getString("name"));
+        name.setText(getArguments().getString("name"));
         jobTitle.setText(getArguments().getString("jobTitle"));
         description.setText(getArguments().getString("description"));
         facebookUrl = getArguments().getString("facebook");
@@ -131,46 +133,42 @@ public class SpecialistInfoFragment extends Fragment {
                 String url = documentSnapshot.getString("imageUrl");
                 Picasso.get().load(url).into(profile_image);
 
-                String sname = documentSnapshot.getString("name");
-                name.setText(sname);
+//                String sname = documentSnapshot.getString("name");
+//                name.setText(sname);
 
-                String sjobtitle = documentSnapshot.getString("jobTitle");
-                jobTitle.setText(sjobtitle);
+//                String sjobtitle = documentSnapshot.getString("jobTitle");
+//                jobTitle.setText(sjobtitle);
 
                 String sdescription = documentSnapshot.getString("description");
                 description.setText(sdescription);
 
                 String sfacebook = documentSnapshot.getString("facebook");
                 facebookUrl = sfacebook;
-                if (facebookUrl.equals("")) {
-                    facebookIcon.setVisibility(View.INVISIBLE);
+                if (!facebookUrl.equals("")) {
+                    facebookIcon.setVisibility(View.VISIBLE);
                 }
                 String sinstagram = documentSnapshot.getString("instagram");
                 instagramUrl = sinstagram;
-                if (instagramUrl.equals("")) {
-                    instagramIcon.setVisibility(View.INVISIBLE);
+                if (!instagramUrl.equals("")) {
+                    instagramIcon.setVisibility(View.VISIBLE);
                 }
             }
         });
 
 
         recyclerview();
-        Log.d("test", "onviewcreated");
 
 
         facebookIcon.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
-
-                assert getArguments() != null;
-                if (!Objects.equals(getArguments().getString("facebook"), "")) {
-                    String fb = getArguments().getString("facebook");
-                    Intent facebookIntent = new Intent(Intent.ACTION_VIEW);
-                    String facebookUrl = getFacebookPageURL(getContext());
-                    facebookIntent.setData(Uri.parse(facebookUrl + fb));
-                    startActivity(facebookIntent);
-                }
+                Intent facebookIntent = new Intent(Intent.ACTION_VIEW);
+                //  String facebookUrl = getFacebookPageURL(this);
+                facebookIntent.setData(Uri.parse(getFacebookPageURL(getContext(), getArguments().getString("facebook"))));
+                startActivity(facebookIntent);
+                Log.d("test", facebookIntent.toString())
+                ;
 
             }
         });
@@ -247,42 +245,6 @@ public class SpecialistInfoFragment extends Fragment {
     }
 
 
-    public static String FACEBOOK_URL = "https://www.facebook.com/";
-    public static String FACEBOOK_PAGE_ID = "YourPageName";
-
-    //method to get the right URL to use in the intent
-    public String getFacebookPageURL(Context context) {
-        PackageManager packageManager = context.getPackageManager();
-        try {
-            int versionCode = packageManager.getPackageInfo("com.facebook.katana", 0).versionCode;
-            if (versionCode >= 3002850) { //newer versions of fb app
-                return "fb://facewebmodal/f?href=" + FACEBOOK_URL + getArguments().getString("facebook");
-            } else { //older versions of fb app
-                return "fb://page/" + FACEBOOK_PAGE_ID;
-            }
-        } catch (PackageManager.NameNotFoundException e) {
-            return FACEBOOK_URL; //normal web url
-        }
-    }
-
-    public static String INSTAGRAM_URL = "https://www.instagram.com";
-    public static String INSTAGRAM_PAGE_ID = "YourPageName";
-
-    //method to get the right URL to use in the intent
-    public String getInstagramPageURL(Context context) {
-        PackageManager packageManager = context.getPackageManager();
-        try {
-            int versionCode = packageManager.getPackageInfo("com.instagram.katana", 0).versionCode;
-            if (versionCode >= 3002850) { //newer versions of fb app
-                return "fb://facewebmodal/f?href=" + FACEBOOK_URL;
-            } else { //older versions of fb app
-                return "fb://page/" + FACEBOOK_PAGE_ID;
-            }
-        } catch (PackageManager.NameNotFoundException e) {
-            return FACEBOOK_URL; //normal web url
-        }
-    }
-
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle item selection
@@ -302,4 +264,35 @@ public class SpecialistInfoFragment extends Fragment {
                 return super.onOptionsItemSelected(item);
         }
     }
+
+    private static boolean appInstalledOrNot(Context context, String uri) {
+        PackageManager pm = context.getPackageManager();
+        try {
+            pm.getPackageInfo(uri, PackageManager.GET_ACTIVITIES);
+            return true;
+        } catch (PackageManager.NameNotFoundException e) {
+        }
+
+        return false;
+    }
+
+    public static String getFacebookPageURL(Context context, String pageid) {
+        String result = "";
+        final String FACEBOOK_PAGE_ID = pageid;
+        final String FACEBOOK_URL = "https://fb.com/" + pageid;
+
+        if (appInstalledOrNot(context, "com.facebook.katana")) {
+            try {
+                result = "fb://facewebmodal/f?href=https://www.facebook.com/" + FACEBOOK_PAGE_ID;
+                // previous version, maybe relevant for old android APIs ?
+                // return "fb://facewebmodal/f?href=" + FACEBOOK_URL;
+            } catch (Exception e) {
+            }
+        } else {
+            result = FACEBOOK_URL;
+        }
+        return result;
+    }
+
+
 }

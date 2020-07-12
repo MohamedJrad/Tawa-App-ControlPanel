@@ -1,6 +1,5 @@
 package com.tawa.tawa_app_controlpanel.specialities;
 
-import android.speech.SpeechRecognizer;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -27,24 +26,27 @@ class SpecialityAdapter extends FirestoreRecyclerAdapter<Speciality, SpecialityA
 
     @Override
     protected void onBindViewHolder(@NonNull SpecialityHolder holder, int position, @NonNull Speciality model) {
-        holder.textView.setText(model.getName());
+        holder.textViewSpeciality.setText(model.getName()  );
+        holder.textViewNum.setText("(" +Integer.toString(model.getSpecialistsNum())+ ")");
     }
 
     @NonNull
     @Override
     public SpecialityHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.region_list_item, parent, false);
+        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.speciality_list_item, parent, false);
         return new SpecialityHolder(v);
     }
 
 
     class SpecialityHolder extends RecyclerView.ViewHolder {
-        TextView textView;
+        TextView textViewSpeciality;
+        TextView textViewNum;
 
 
         public SpecialityHolder(View itemView) {
             super(itemView);
-            textView = itemView.findViewById(R.id.textview_region);
+            textViewNum=itemView.findViewById(R.id.textView_num);
+            textViewSpeciality = itemView.findViewById(R.id.textview_speciality);
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {

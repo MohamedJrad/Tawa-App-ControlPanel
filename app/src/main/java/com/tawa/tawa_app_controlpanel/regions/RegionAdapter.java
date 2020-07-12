@@ -3,8 +3,6 @@ package com.tawa.tawa_app_controlpanel.regions;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Filter;
-import android.widget.Filterable;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -47,7 +45,7 @@ public class RegionAdapter extends FirestoreRecyclerAdapter<Region, RegionAdapte
 
         public NoteHolder(View itemView) {
             super(itemView);
-            textView = itemView.findViewById(R.id.textview_region);
+            textView = itemView.findViewById(R.id.textview_speciality);
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {

@@ -14,6 +14,7 @@ import android.view.ViewGroup;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageReference;
@@ -35,6 +36,8 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.tawa.tawa_app_controlpanel.model.GalleryImage;
 import com.tawa.tawa_app_controlpanel.model.Specialist;
 
+import java.util.Collection;
+
 import de.hdodenhof.circleimageview.CircleImageView;
 
 public class AddSpecialistFragment extends Fragment {
@@ -45,6 +48,8 @@ public class AddSpecialistFragment extends Fragment {
 
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
     private CollectionReference notebookRef = db.collection("specialists");
+
+
     private CollectionReference galleryRef;
     private StorageReference storageReference;
 
@@ -94,7 +99,7 @@ public class AddSpecialistFragment extends Fragment {
         address = view.findViewById(R.id.editText_address);
         phone = view.findViewById(R.id.editText_phone);
         jobTitle = view.findViewById(R.id.editText_jobtitle);
-        description = view.findViewById(R.id.editText_description);
+
 
         email = view.findViewById(R.id.editText_email);
         addbtn = view.findViewById(R.id.button_update);
@@ -211,7 +216,6 @@ public class AddSpecialistFragment extends Fragment {
                                     String simageUrl = imageUrl;
                                     String sname = name.getText().toString();
                                     String sjobTitle = jobTitle.getText().toString();
-                                    String sdescription = description.getText().toString();
                                     String saddress = address.getText().toString();
                                     String semail = email.getText().toString();
                                     String sphone = phone.getText().toString();
@@ -221,7 +225,10 @@ public class AddSpecialistFragment extends Fragment {
                                     String governorate = "سوسة";
 
 
-                                    addSpecialist( sname, sjobTitle, simageUrl, speciality, saddress, sphone, semail, region, governorate, true);
+                                    addSpecialist(sname, sjobTitle, simageUrl, speciality, saddress, sphone, semail, region, governorate, true);
+
+
+
                                     requireActivity().onBackPressed();
                                 }
                             });
@@ -249,6 +256,8 @@ public class AddSpecialistFragment extends Fragment {
 
         }
     }
+
+
 
 //    private String getFileExtension(Uri uri) {
 //        ContentResolver contentResolver = requireContext().getContentResolver();

@@ -1,6 +1,7 @@
 package com.tawa.tawa_app_controlpanel.specialists;
 
 import android.content.Intent;
+import android.media.MediaPlayer;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -19,17 +20,24 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
+import com.google.firebase.firestore.QuerySnapshot;
 import com.tawa.tawa_app_controlpanel.R;
 import com.tawa.tawa_app_controlpanel.model.Region;
 import com.tawa.tawa_app_controlpanel.model.Specialist;
 import com.tawa.tawa_app_controlpanel.model.Speciality;
 import com.tawa.tawa_app_controlpanel.ui.login.LoginActivity;
+
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Objects;
 
 
 public class SpecialistsFragment extends Fragment {
@@ -38,22 +46,25 @@ public class SpecialistsFragment extends Fragment {
 
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
     private CollectionReference notebookRef = db.collection("specialists");
+    CollectionReference specialistsRef = db.collection("specialists");
     private SpecialistAdapter adapter;
     SearchView searchView;
+    private int specialistsNum = 0;
 
-    public static SpecialistsFragment newInstance() {
-        return new SpecialistsFragment();
-    }
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         setHasOptionsMenu(true);
+
     }
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
+
+
         return inflater.inflate(R.layout.fragment_specialist, container, false);
     }
 
@@ -61,13 +72,18 @@ public class SpecialistsFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable final Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         TextView text = getActivity().findViewById(R.id.toolbar_title);
-        text.setText(getArguments().getString("speciality") );
+        text.setText(getArguments().getString("speciality"));
+
+
+        updataSecialistsNumber();
+
 
         FloatingActionButton fb = view.findViewById(R.id.floatingActionButton_specialist);
         fb.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Bundle bundle = new Bundle();
+                bundle.putString("id", getArguments().getString("id"));
                 bundle.putString("region", getArguments().getString("region"));
                 bundle.putString("speciality", getArguments().getString("speciality"));
 
@@ -107,11 +123,10 @@ public class SpecialistsFragment extends Fragment {
                 bundle.putString("email", specialist.getEmail());
                 bundle.putString("imageUrl", specialist.getImageUrl());
                 bundle.putBoolean("visibility", specialist.getVisibility());
-                bundle.putString("jobTitle",specialist.getJobTitle());
-                bundle.putString("description",specialist.getDescription());
-                bundle.putString("facebook",specialist.getFacebook());
-                bundle.putString("instagram",specialist.getInstagram());
-
+                bundle.putString("jobTitle", specialist.getJobTitle());
+                bundle.putString("description", specialist.getDescription());
+                bundle.putString("facebook", specialist.getFacebook());
+                bundle.putString("instagram", specialist.getInstagram());
 
 
                 Navigation.findNavController(getView()).navigate(R.id.action_specialistsFragment_to_specialistInfoFragment, bundle);
@@ -128,7 +143,7 @@ public class SpecialistsFragment extends Fragment {
 
                 bundle.putString("id", id);
                 bundle.putString("name", specialist.getName());
-                bundle.putString("jobTitle",specialist.getJobTitle());
+                bundle.putString("jobTitle", specialist.getJobTitle());
                 bundle.putString("address", specialist.getAddress());
                 bundle.putString("phone", specialist.getPhone());
                 bundle.putString("email", specialist.getEmail());
@@ -207,5 +222,26 @@ public class SpecialistsFragment extends Fragment {
                 return super.onOptionsItemSelected(item);
         }
     }
+
+
+    private void updataSecialistsNumber() {
+        final DocumentReference specialityRef;
+//        specialityRef = db.collection("regions").document("S6T3D5kLscFURnaApILH").collection("specialities").document(getArguments().getString("id"));
+        specialityRef = db.collection("regions").document(getArguments().getString("regionId")).collection("specialities").document(getArguments().getString("id"));
+
+
+
+        System.out.println(specialityRef);
+
+        specialistsRef.whereEqualTo("region", getArguments().getString("region")).whereEqualTo("speciality", getArguments().getString("speciality")).get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+            @Override
+            public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                specialistsNum = queryDocumentSnapshots.size();
+                specialityRef.update("specialistsNum", specialistsNum);
+            }
+        });
+
+    }
+
 
 }

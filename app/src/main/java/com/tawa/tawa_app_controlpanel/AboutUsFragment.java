@@ -10,6 +10,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -48,11 +49,12 @@ ImageView facebook;
             public void onClick(View v) {
 
 
-                    String fb = "france24";
-                    Intent facebookIntent = new Intent(Intent.ACTION_VIEW);
-                    String facebookUrl = getFacebookPageURL(getContext());
-                    facebookIntent.setData(Uri.parse(facebookUrl+fb));
-                    startActivity(facebookIntent);
+                Intent facebookIntent = new Intent(Intent.ACTION_VIEW);
+                //  String facebookUrl = getFacebookPageURL(this);
+                facebookIntent.setData(Uri.parse(getFacebookPageURL(getContext(), "france24")));
+                startActivity(facebookIntent);
+                Log.d("test", facebookIntent.toString())
+                ;
 
             }
         });
@@ -64,21 +66,33 @@ ImageView facebook;
         menu.clear();
     }
 
-    public static String FACEBOOK_URL = "https://www.facebook.com/";
-    public static String FACEBOOK_PAGE_ID = "YourPageName";
-
-    //method to get the right URL to use in the intent
-    public String getFacebookPageURL(Context context) {
-        PackageManager packageManager = context.getPackageManager();
+    private static boolean appInstalledOrNot(Context context, String uri) {
+        PackageManager pm = context.getPackageManager();
         try {
-            int versionCode = packageManager.getPackageInfo("com.facebook.katana", 0).versionCode;
-            if (versionCode >= 3002850) { //newer versions of fb app
-                return "fb://facewebmodal/f?href=" + FACEBOOK_URL + getArguments().getString("facebook");
-            } else { //older versions of fb app
-                return "fb://page/" + FACEBOOK_PAGE_ID;
-            }
+            pm.getPackageInfo(uri, PackageManager.GET_ACTIVITIES);
+            return true;
         } catch (PackageManager.NameNotFoundException e) {
-            return FACEBOOK_URL; //normal web url
         }
+
+        return false;
     }
+
+    public static String getFacebookPageURL(Context context, String pageid) {
+        String result = "";
+        final String FACEBOOK_PAGE_ID = pageid;
+        final String FACEBOOK_URL = "https://fb.com/" + pageid;
+
+        if (appInstalledOrNot(context, "com.facebook.katana")) {
+            try {
+                result = "fb://facewebmodal/f?href=https://www.facebook.com/" + FACEBOOK_PAGE_ID;
+                // previous version, maybe relevant for old android APIs ?
+                // return "fb://facewebmodal/f?href=" + FACEBOOK_URL;
+            } catch (Exception e) {
+            }
+        } else {
+            result = FACEBOOK_URL;
+        }
+        return result;
+    }
+
 }

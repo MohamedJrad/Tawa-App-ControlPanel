@@ -85,6 +85,7 @@ public class SpecialitiesFragment extends Fragment {
                 assert getArguments() != null;
                 String id = getArguments().getString("id");
                 Bundle bundle = new Bundle();
+
                 bundle.putString("region", getArguments().getString("region"));
                 bundle.putString("id", id);
 
@@ -112,6 +113,8 @@ public class SpecialitiesFragment extends Fragment {
                 Speciality speciality = documentSnapshot.toObject(Speciality.class);
                 String id = documentSnapshot.getId();
                 Bundle bundle = new Bundle();
+                bundle.putString("id",id);
+                bundle.putString("regionId",getArguments().getString("id"));
                 bundle.putString("region", getArguments().getString("region"));
                 bundle.putString("speciality", speciality.getName());
 
